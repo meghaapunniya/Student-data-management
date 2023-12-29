@@ -2,6 +2,9 @@ import React, { useRef } from 'react';
 import './App.css'; 
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import Stack from '@mui/material/Stack';
+import { useReactToPrint } from 'react-to-print';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 
 const students =[
   {
@@ -109,7 +112,7 @@ const students =[
     "InterestedRoles": "Full-stack Python Developer",
     "Photo": "https://drive.google.com/uc?id=11V6oQCztTx-U75CRio6HdXWtQLqbXRdA",
     "CV": "https://drive.google.com/open?id=1V77XpisIfSmA0lCjiBQhepHIDcRtzi8V",
-    "LinkedIn": "",
+    "LinkedIn": "https://www.linkedin.com/in/nimisha-k-652882237/",
     "Github": "https://github.com/nimishapradeesh"
   },
   {
@@ -155,7 +158,7 @@ const students =[
     "PhoneNumber": "8943029558",
     "Qualification": "M.Sc",
     "InterestedRoles": "Full-stack Javascipt Developer",
-    "Photo": "nil",
+    "Photo": "https://drive.google.com/uc?id=1UfU-xTuetv6LLfKetTG8yLM3OBRagJQo",
     "CV": "https://drive.google.com/open?id=1V2NwJLiUY0OQSTtqvw34RRWJhiVvOW3M",
     "LinkedIn": "https://www.linkedin.com/in/akshara-m-2b653628a",
     "Github": "https://github.com/akshara558"
@@ -204,7 +207,7 @@ const students =[
     "Qualification": "M.Sc",
     "InterestedRoles": "Artificial intelligence/ Machine learning, Data science",
     "Photo": "https://drive.google.com/uc?id=16dGPwhtelKgKb-EDJvWiuYmmvDMny1L4",
-    "CV": "nil",
+    "CV": "https://drive.google.com/file/d/1u51cwTF4vtxZPTMDd2YHTPZY9QZk0lha",
     "LinkedIn": "https://www.linkedin.com/in/anish-giri-a4031723a/",
     "Github": "https://github.com/Leptons1618"
   },
@@ -253,7 +256,7 @@ const students =[
     "InterestedRoles": "Media production and content Creation",
     "Photo": "nil",
     "CV": "nil",
-    "LinkedIn": "nil",
+    "LinkedIn": "",
     "Github": "https://github.com/Hafisali23"
   },
   {
@@ -349,7 +352,7 @@ const students =[
     "InterestedRoles": "App Developer ",
     "Photo": "https://drive.google.com/uc?id=1y52aZIZ9K5ARlVqQh2VCZJpN1-C0R0rT",
     "CV": "https://drive.google.com/open?id=1YKQx2TQfa4F4T88lSP07J5ndaRUiPAuW",
-    "LinkedIn": "https://www.linkedin.com/in/%C3%9Flack-soul-93a323202?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BwSk58bihTPiaPy3UZlS%2FNg%3D%3D",
+    "LinkedIn": "",
     "Github": "https://github.com/Mohamed-Azgar"
   },
   {
@@ -475,75 +478,85 @@ const students =[
 ];
 
 const App = () => {
-  const tableRef = useRef();
+   const ref = useRef(); 
 
-  const downloadAsPDF = () => {
-    const input = tableRef.current;
+  const handlePrint = useReactToPrint({
+    content: () => ref.current,
+    documentTitle: `StudentProfiles-MSc`
+  });
 
-    html2canvas(input).then((canvas) => {
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, 297);
-      pdf.save('table.pdf');
-    });
-  };
+
+
 
   return (
     <div className="app-container">
-      <div className="scrollable-container" ref={tableRef}>
-        {/* <table className="student-table">
-          <thead>
-            <tr>
-              <th className="fixed-column">Photo</th>
-              <th className="fixed-column">Name</th>
-              <th>Reg. No</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Qualification</th>
-              <th>Interested Roles</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map((student, index) => (
-              <tr key={index}>
-                <td className="fixed-column"><img src={student.Photo} alt="Profile" className="profile-img" /></td>
-                <td className="fixed-column bold-text">{student.Name}</td>
-                <td>{student.RegNo}</td>
-                <td>{student.EMail}</td>
-                <td>{student.PhoneNumber}</td>
-                <td>{student.Qualification}</td>
-                <td>{student.InterestedRoles}</td>
-                <td className="small-padding"><a href={student.LinkedIn} target="_blank" rel="noopener noreferrer" className="contact-link">{student.LinkedIn}</a></td>
-                <td className="small-padding"><a href={student.Github} target="_blank" rel="noopener noreferrer" className="contact-link">{student.Github}</a></td>
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
+      <div className="scrollable-container" ref={ref}>
+        <h1 style={{textAlign:'center'}}>Student Profiles</h1>
        <div class="student-cards">
   {students.map((student, index) => (
     <div class="student-card" key={index}>
       <div class="card-header">
-        <img src={student.Photo} alt="Profile" class="profile-img" />
-        <h3 class="bold-text">{student.Name}</h3>
+      <div className="profile-info">
+      <Stack  direction="column"
+  justifyContent="center"
+  alignItems="center"
+  spacing={0}>
+                  <img src={student.Photo} alt="Profile" class="profile-img" />
+                  <h3 class="bold-text">{student.Name}</h3>
+                 
+                  </Stack>
+                  <div className="profile-details">
+                    <Stack  direction="column"
+  justifyContent="space-evenly"
+  alignItems="center"
+  spacing={0}>
+                   <p>{student.Qualification}</p>
+                  <div style={{display:'flex',justifyContent:'flex-start',alignItems:'center'}}>   <span style={{fontSize:'12px'}}> {student.EMail} / {student.PhoneNumber}</span> </div>
+                    </Stack>
+                   
+                  </div>
+                </div>
       </div>
       <div class="card-body">
-        <p><strong>Reg. No:</strong> {student.RegNo}</p>
-        <p><strong>Email:</strong> {student.EMail}</p>
-        <p><strong>Phone:</strong> {student.PhoneNumber}</p>
-        <p><strong>Qualification:</strong> {student.Qualification}</p>
+              
         <p><strong>Interested Roles:</strong> {student.InterestedRoles}</p>
+        <Stack
+  direction="row"
+  justifyContent="space-between"
+  alignItems="top"
+  spacing={2}
+  sx={{paddingTop:'7px'}}
+>
+<span className=''><strong>Resume</strong></span> <a href={student.CV} target="_blank" rel="noopener noreferrer" class="">{student.CV}</a>
+</Stack>
+<Stack
+  direction="row"
+  justifyContent="space-between"
+  alignItems="top"
+  spacing={2}
+  sx={{paddingTop:'7px'}}
+>
+<span className=''><strong>Linkedin</strong></span> <a href={student.LinkedIn} target="_blank" rel="noopener noreferrer" class="">{student.LinkedIn}</a>
+</Stack>
+<Stack
+  direction="row"
+  justifyContent="space-between"
+  alignItems="center"
+  spacing={2}
+  sx={{paddingTop:'15px'}}
+>
+<span className=''><strong>GitHub</strong></span> <a href={student.Github} target="_blank" rel="noopener noreferrer" class="">{student.Github}</a>
+</Stack>
+         
+      
       </div>
-      <div class="card-footer">
-        <a href={student.LinkedIn} target="_blank" rel="noopener noreferrer" class="contact-link">{student.LinkedIn}</a>
-        <a href={student.Github} target="_blank" rel="noopener noreferrer" class="contact-link">{student.LinkedIn}</a>
-      </div>
+     
     </div>
   ))}
 </div>
 
       </div>
-      <button onClick={downloadAsPDF}>Download as PDF</button>
+      <button onClick={handlePrint}>Download as PDF</button>
     </div>
   );
 };
